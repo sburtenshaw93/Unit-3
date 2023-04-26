@@ -19,6 +19,14 @@
   <div class="container">
 
     <!-- This is where the main content goes. -->
+    <div class="navbar-nav">
+        <a class="nav-link" href="/melons">All Melons</a>
+        <a class="nav-link" href="/cart">My Shopping Cart</a>
+    </div>
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <p class="alert alert-warning">{{ message }}</p>
+        {% endfor %}
     {% block body %}
         BODY OF PAGE GOES HERE VIA INHERITANCE
     {% endblock %}

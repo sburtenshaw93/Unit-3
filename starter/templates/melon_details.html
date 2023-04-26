@@ -4,9 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/melon_details.css"/>
     <title>Document</title>
 </head>
 <body>
-    
+    {%  extends 'base.html' %}
+
+    {% block body %}
+
+    <h2>{{ melon.common_name }}</h2>
+    <img class="melon-image" src="{{ melon.image_url }}">
+    <h5>Price per melon: {{ melon.price_str() }}</h5>
+
+    <ul>
+        <li>Color: {{ melon.color }}<li>
+        {% if melon.seedless %}
+            <li>Seedless melon</li>
+        {% else %}
+            <li>Warning! This melon has seeds</li>
+        {% endif%} 
+        </ul>
+        
+        <a class="btn btn-primary" href="{{ url_for('add_to_cart', melon_id=melon_id)}}">Add to Cart</a>
+        {% endblock %}
 </body>
 </html>
