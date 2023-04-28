@@ -1,9 +1,15 @@
 from flask import Flask, render_template, redirect, flash, request, session
 import jinja2
+import melons
+from forms import LoginForm
 
 app = Flask(__name__)
 app.jinja_env.undefined = jinja2.StrictUndefined
 app.secret_key = 'dev'
+
+@app.errorhandler(404)
+def error_404(e):
+    return render_template("404.html")
 
 @app.route("/")
 def homepage():
@@ -22,6 +28,9 @@ def melon_details(melon_id):
 
 @app.route("/add_to_cart/<melon_id>")
 def add_to_cart(melon_id):
+    
+        if 'username' not in session:
+            return redirect("/login")
     
         if 'cart' not in session:
             session['cart'] = {} 
@@ -60,7 +69,33 @@ def empty_cart():
     session["cart"] = {}
     
     return redirect("/cart")   
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm(request.form)
     
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        
+        user = customers.get_by_username(username)
+        
+        if not user or user['password'] != password:
+            flash("Invaild username of password")
+            return redirect('/login')
+        
+        session["username"] = user['username']
+        flash("Logged in.")
+        return redirect("/melons")
+        
+    return render_template("login.html", form=form)
+
+@app.route("/logout")
+def logout():
+    
+    del session["username"]
+    flash("Logged out.")
+    return redirect("/login")
     
 if __name__ == "__main__":
     app.env = "development"
