@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, flash, request, session
 import jinja2
 import melons
 from forms import LoginForm
+import customers
 
 app = Flask(__name__)
 app.jinja_env.undefined = jinja2.StrictUndefined
